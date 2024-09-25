@@ -1,6 +1,7 @@
 import express, { urlencoded } from 'express';
 import morgan from "morgan";
 import cors from "cors";
+import { UserRouter } from './router/user.router';
 
 
 class ServeBootstrap {
@@ -13,13 +14,13 @@ class ServeBootstrap {
         this.app.use(morgan("dev"));
         this.app.use(cors());
 
-        this.app.get("/api", (req, res)=> {
-            res.status(200).json({
-                message: "Primer Punto de entrada!!!"
-            });
-        })
+        this.app.use("/api", this.routers());
         this.listen();
     }
+
+    routers():Array<express.Router>{
+        return [new UserRouter().router];
+    };
 
     public listen(){
         this.app.listen(this.port, ()=>{
